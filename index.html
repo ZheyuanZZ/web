@@ -3,110 +3,98 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Zheyuan Zhang</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#FAFAF8;--fg:#111;--fg-muted:#666;--fg-light:#999;--border:#E0E0DC;--white:#fff;--font-body:'Instrument Sans',-apple-system,sans-serif;--font-display:'DM Serif Display',Georgia,serif;--ease:cubic-bezier(.22,1,.36,1);--max-w:1320px}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:16px;scroll-behavior:smooth}
-body{font-family:var(--font-body);background:var(--bg);color:var(--fg);overflow:hidden;-webkit-font-smoothing:antialiased;height:100vh}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none}
-img{display:block;max-width:100%}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);overflow:hidden;-webkit-font-smoothing:antialiased;height:100vh;height:100dvh}
+a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;border:none;background:none}img{display:block;max-width:100%}
 
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;height:56px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(250,250,248,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.nav-name{font-size:15px;font-weight:600;letter-spacing:.06em;cursor:pointer}
-.nav-center{font-size:13px;color:var(--fg-muted);letter-spacing:.04em}
-.nav-menu{width:32px;height:24px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;padding:4px 0}
+.nav{position:fixed;top:0;left:0;right:0;height:52px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,40px);background:rgba(250,250,248,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.nav-name{font-size:clamp(13px,1.6vw,15px);font-weight:600;letter-spacing:.06em;cursor:pointer}
+.nav-center{font-size:clamp(11px,1.3vw,13px);color:var(--fg-muted);letter-spacing:.04em}
+.nav-menu{width:28px;height:20px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;padding:2px 0}
 .nav-menu span{display:block;height:1.5px;background:var(--fg)}
-
-/* OVERLAY MENU */
-.menu-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.menu-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
 .menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay a{font-family:var(--font-display);font-size:clamp(36px,5vw,56px);color:var(--fg);transition:color .3s}
+.menu-overlay a{font-family:var(--font-display);font-size:clamp(28px,5vw,52px);color:var(--fg);transition:color .3s}
 .menu-overlay a:hover{color:var(--fg-muted)}
-.menu-close{position:absolute;top:20px;right:40px;font-size:32px;color:var(--fg-muted);cursor:pointer}
+.menu-close{position:absolute;top:16px;right:clamp(16px,4vw,40px);font-size:28px;color:var(--fg-muted);cursor:pointer}
 
-/* SCENE */
-#scene-container{width:100%;height:100vh;position:relative;cursor:grab;overflow:hidden}
+#scene-container{width:100%;height:100vh;height:100dvh;position:relative;cursor:grab;overflow:hidden;touch-action:none}
 #scene-container:active{cursor:grabbing}
 #three-canvas{width:100%;height:100%}
 
-/* FACE LABELS */
-.face-label{position:absolute;font-family:var(--font-display);font-weight:400;white-space:nowrap;pointer-events:auto;cursor:pointer;transition:all .7s var(--ease);user-select:none}
+.face-label{position:absolute;font-family:var(--font-display);font-weight:400;white-space:nowrap;pointer-events:auto;cursor:pointer;transition:all .6s var(--ease);user-select:none;z-index:5}
 
-/* FLOATING WORKS */
-.float-container{position:absolute;inset:0;pointer-events:none;transition:opacity .6s var(--ease)}
-.float-container.hidden{opacity:0}
-.float-item{position:absolute;pointer-events:auto;cursor:pointer;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);transition:transform .4s var(--ease),opacity .6s var(--ease);opacity:0}
+.float-container{position:absolute;inset:0;pointer-events:none;transition:opacity .5s var(--ease)}
+.float-container.hidden{opacity:0;pointer-events:none}
+.float-grid{position:absolute;pointer-events:none}
+.float-grid.left-col{top:8%;left:3%;display:flex;flex-direction:column;gap:clamp(8px,1.2vw,14px)}
+.float-grid.right-col{top:8%;right:3%;display:flex;flex-direction:column;gap:clamp(8px,1.2vw,14px)}
+.float-grid.bottom-row{bottom:12%;left:50%;transform:translateX(-50%);display:flex;gap:clamp(8px,1.5vw,16px)}
+
+.float-item{pointer-events:auto;cursor:pointer;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.07);transition:transform .4s var(--ease),opacity .5s var(--ease);opacity:0;width:clamp(120px,18vw,260px);height:clamp(80px,12vw,170px)}
 .float-item.show{opacity:1}
-.float-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.float-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
 .float-item:hover img{transform:scale(1.06)}
-.float-item:hover{box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.float-item:hover{box-shadow:0 6px 24px rgba(0,0,0,.13)}
 
-/* Research float items are text bars */
-.float-pub{position:absolute;pointer-events:auto;cursor:pointer;background:var(--white);padding:12px 20px;font-size:13px;line-height:1.5;color:var(--fg);box-shadow:0 2px 16px rgba(0,0,0,.06);border:1px solid var(--border);transition:all .5s var(--ease);opacity:0;max-width:420px}
+.float-pub{pointer-events:auto;cursor:pointer;background:var(--white);padding:clamp(8px,1vw,14px) clamp(10px,1.2vw,18px);font-size:clamp(9px,1vw,13px);line-height:1.45;color:var(--fg);box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid var(--border);transition:all .4s var(--ease);opacity:0;width:clamp(160px,22vw,380px)}
 .float-pub.show{opacity:1}
-.float-pub:hover{box-shadow:0 4px 20px rgba(0,0,0,.12);transform:translateY(-2px)}
+.float-pub:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
 .float-pub a{color:var(--fg-muted);text-decoration:underline}
-.float-pub .award-tag{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;background:var(--fg);color:var(--white);margin-left:4px;vertical-align:middle}
+.float-pub .at{display:inline-block;font-size:clamp(7px,.7vw,9px);font-weight:700;padding:1px 5px;background:var(--fg);color:var(--white);margin-left:3px;vertical-align:middle}
 
-/* BIO */
-.bio{position:absolute;bottom:40px;right:40px;max-width:380px;text-align:right;font-size:13px;color:var(--fg-muted);line-height:1.65;z-index:10}
-@media(max-width:768px){.bio{bottom:100px;right:20px;left:20px;text-align:left;max-width:none;font-size:12px}}
+.bio{position:absolute;bottom:clamp(16px,3vw,40px);right:clamp(16px,4vw,40px);max-width:clamp(200px,28vw,360px);text-align:right;font-size:clamp(10px,1vw,13px);color:var(--fg-muted);line-height:1.6;z-index:10}
+@media(max-width:768px){.bio{display:none}}
 
-/* SOCIAL */
-.social{position:absolute;bottom:36px;left:40px;display:flex;gap:24px;z-index:10}
-.social a{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--fg-muted);letter-spacing:.03em;transition:color .3s}
+.social{position:absolute;bottom:clamp(16px,3vw,40px);left:clamp(16px,4vw,40px);display:flex;gap:clamp(12px,2vw,24px);z-index:10}
+.social a{display:flex;align-items:center;gap:6px;font-size:clamp(10px,1vw,12px);color:var(--fg-muted);transition:color .3s}
 .social a:hover{color:var(--fg)}
-.social svg{width:18px;height:18px;fill:currentColor;opacity:.6;transition:opacity .3s}
+.social svg{width:clamp(14px,1.5vw,18px);height:clamp(14px,1.5vw,18px);fill:currentColor;opacity:.6;transition:opacity .3s}
 .social a:hover svg{opacity:1}
+@media(max-width:480px){.social span{display:none}}
 
-/* HINT */
-.scroll-hint{position:absolute;bottom:140px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--fg-light);letter-spacing:.12em;text-transform:uppercase;transition:opacity .6s;animation:pulse 2.5s ease-in-out infinite;z-index:10}
+.scroll-hint{position:absolute;bottom:clamp(60px,10vh,130px);left:50%;transform:translateX(-50%);font-size:clamp(9px,1vw,11px);color:var(--fg-light);letter-spacing:.12em;text-transform:uppercase;animation:pulse 2.5s ease-in-out infinite;z-index:10}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
 
-/* CONTENT PAGES */
-.content-page{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .5s var(--ease);padding-top:56px}
+.content-page{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .5s var(--ease);padding-top:52px}
 .content-page.open{opacity:1;pointer-events:all}
-.content-inner{max-width:var(--max-w);margin:0 auto;padding:60px 40px 100px}
-.content-back{font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-muted);cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-bottom:48px;transition:color .3s;background:none;border:none;font-family:inherit}
+.content-inner{max-width:var(--max-w);margin:0 auto;padding:clamp(24px,4vw,60px) clamp(16px,4vw,40px) 100px}
+.content-back{font-size:clamp(11px,1.2vw,13px);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-muted);cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-bottom:clamp(24px,4vw,48px);transition:color .3s;background:none;border:none;font-family:inherit}
 .content-back:hover{color:var(--fg)}
-.content-title{font-family:var(--font-display);font-size:clamp(36px,5vw,64px);margin-bottom:48px}
-.works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:900px){.works-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.works-grid{grid-template-columns:1fr}}
+.content-title{font-family:var(--font-display);font-size:clamp(28px,5vw,64px);margin-bottom:clamp(24px,4vw,48px)}
+.works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:clamp(12px,2vw,20px)}
 .work-card{position:relative;overflow:hidden;aspect-ratio:4/3;background:#eee;cursor:pointer}
 .work-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .work-card:hover img{transform:scale(1.05)}
-.work-card .wc-info{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:var(--white);opacity:0;transition:opacity .3s}
-.work-card:hover .wc-info{opacity:1}
-.work-card .wc-info h3{font-family:var(--font-display);font-size:18px;margin-bottom:2px}
-.work-card .wc-info p{font-size:12px;opacity:.7}
-.pub-section{margin-bottom:56px}
-.pub-section-title{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-light);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.pub-entry{padding:16px 0;border-bottom:1px solid var(--border);font-size:15px;line-height:1.65;color:var(--fg)}
-.pub-entry a{color:var(--fg-muted);text-decoration:underline;text-underline-offset:2px}
-.pub-entry a:hover{color:var(--fg)}
-.pub-entry .award-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;background:var(--fg);color:var(--white);vertical-align:middle;margin-left:6px}
-.pub-columns{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.work-card .wc-info{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:var(--white);transition:opacity .3s}
+@media(min-width:769px){.work-card .wc-info{opacity:0}.work-card:hover .wc-info{opacity:1}}
+.work-card .wc-info h3{font-family:var(--font-display);font-size:clamp(14px,1.6vw,18px)}
+.work-card .wc-info p{font-size:clamp(10px,1vw,12px);opacity:.7}
+.pub-section{margin-bottom:clamp(32px,4vw,56px)}
+.pub-section-title{font-size:clamp(11px,1.2vw,14px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-light);margin-bottom:clamp(16px,2vw,24px);padding-bottom:12px;border-bottom:1px solid var(--border)}
+.pub-entry{padding:clamp(10px,1.5vw,16px) 0;border-bottom:1px solid var(--border);font-size:clamp(12px,1.3vw,15px);line-height:1.65}
+.pub-entry a{color:var(--fg-muted);text-decoration:underline;text-underline-offset:2px}.pub-entry a:hover{color:var(--fg)}
+.pub-entry .at{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;background:var(--fg);color:var(--white);vertical-align:middle;margin-left:6px}
+.pub-columns{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,48px)}
 @media(max-width:768px){.pub-columns{grid-template-columns:1fr}}
-.btn{font-size:13px;font-weight:600;letter-spacing:.06em;padding:12px 28px;border:1px solid var(--fg);display:inline-block;transition:all .3s var(--ease);margin-top:24px}
+.btn{font-size:clamp(11px,1.2vw,13px);font-weight:600;letter-spacing:.06em;padding:12px 28px;border:1px solid var(--fg);display:inline-block;transition:all .3s var(--ease);margin-top:24px}
 .btn:hover{background:var(--fg);color:var(--white)}
-
-/* DETAIL */
-.detail-page{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .4s var(--ease);padding-top:56px}
+.detail-page{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .4s var(--ease);padding-top:52px}
 .detail-page.open{opacity:1;pointer-events:all}
-.detail-inner{max-width:var(--max-w);margin:0 auto;padding:60px 40px 100px}
-.detail-hero{width:100%;max-height:65vh;object-fit:cover;margin-bottom:48px}
-.detail-h1{font-family:var(--font-display);font-size:clamp(32px,4vw,52px);margin-bottom:8px}
-.detail-meta{font-size:14px;color:var(--fg-light);margin-bottom:28px}
-.detail-body p{font-size:16px;line-height:1.75;color:var(--fg-muted);margin-bottom:16px;max-width:700px}
-.detail-gallery{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+.detail-inner{max-width:var(--max-w);margin:0 auto;padding:clamp(24px,4vw,60px) clamp(16px,4vw,40px) 100px}
+.detail-hero{width:100%;max-height:60vh;object-fit:cover;margin-bottom:clamp(24px,4vw,48px)}
+.detail-h1{font-family:var(--font-display);font-size:clamp(24px,4vw,52px);margin-bottom:8px}
+.detail-meta{font-size:clamp(11px,1.2vw,14px);color:var(--fg-light);margin-bottom:24px}
+.detail-body p{font-size:clamp(13px,1.4vw,16px);line-height:1.75;color:var(--fg-muted);margin-bottom:16px;max-width:700px}
+.detail-gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
 .detail-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover}
-@media(max-width:768px){.detail-gallery{grid-template-columns:1fr}}
+@media(max-width:600px){.detail-gallery{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -116,7 +104,6 @@ img{display:block;max-width:100%}
 <span class="nav-center">Personal Website</span>
 <div class="nav-menu" onclick="document.querySelector('.menu-overlay').classList.add('open')"><span></span><span></span><span></span></div>
 </nav>
-
 <div class="menu-overlay">
 <button class="menu-close" onclick="this.parentElement.classList.remove('open')">&times;</button>
 <a href="#" onclick="event.preventDefault();openPage('design');this.closest('.menu-overlay').classList.remove('open')">Design</a>
@@ -127,62 +114,71 @@ img{display:block;max-width:100%}
 
 <div id="scene-container">
 <canvas id="three-canvas"></canvas>
-
-<!-- Labels positioned by JS -->
 <div class="face-label" id="label-design" onclick="lockFace(0)">Design</div>
 <div class="face-label" id="label-research" onclick="lockFace(1)">Research</div>
 <div class="face-label" id="label-art" onclick="lockFace(2)">Art</div>
 
-<!-- Floating design works -->
+<!-- DESIGN FLOATS -->
 <div class="float-container" id="float-design">
-<div class="float-item" style="width:280px;height:180px;top:8%;left:8%" onclick="openDetail('cutia')"><img src="https://static.wixstatic.com/media/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg/v1/fill/w_560,h_360,q_85,enc_avif,quality_auto/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg"></div>
-<div class="float-item" style="width:300px;height:190px;top:5%;left:42%" onclick="openDetail('whisper')"><img src="https://static.wixstatic.com/media/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg/v1/fill/w_600,h_380,q_85,enc_avif,quality_auto/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg"></div>
-<div class="float-item" style="width:270px;height:200px;top:14%;right:3%" onclick="openDetail('crescent')"><img src="https://static.wixstatic.com/media/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg/v1/fill/w_540,h_400,q_85,enc_avif,quality_auto/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg"></div>
-<div class="float-item" style="width:290px;height:200px;top:52%;left:5%" onclick="openDetail('comtour')"><img src="https://static.wixstatic.com/media/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg/v1/fill/w_580,h_400,q_85,enc_avif,quality_auto/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg"></div>
-<div class="float-item" style="width:280px;height:180px;top:68%;left:38%" onclick="openDetail('dovetail')"><img src="https://static.wixstatic.com/media/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg/v1/fill/w_560,h_360,q_85,enc_avif,quality_auto/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg"></div>
-<div class="float-item" style="width:260px;height:190px;top:52%;right:4%" onclick="openDetail('codex')"><img src="https://static.wixstatic.com/media/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg/v1/fill/w_520,h_380,q_85,enc_avif,quality_auto/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg"></div>
-<div class="float-item" style="width:270px;height:170px;top:74%;right:6%" onclick="openDetail('chair1011')"><img src="https://static.wixstatic.com/media/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg/v1/fill/w_540,h_340,q_85,enc_avif,quality_auto/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg"></div>
+<div class="float-grid left-col">
+<div class="float-item" onclick="openDetail('cutia')"><img src="https://static.wixstatic.com/media/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg"></div>
+<div class="float-item" onclick="openDetail('comtour')"><img src="https://static.wixstatic.com/media/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg"></div>
+<div class="float-item" onclick="openDetail('dovetail')"><img src="https://static.wixstatic.com/media/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg"></div>
+</div>
+<div class="float-grid right-col">
+<div class="float-item" onclick="openDetail('whisper')"><img src="https://static.wixstatic.com/media/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg"></div>
+<div class="float-item" onclick="openDetail('crescent')"><img src="https://static.wixstatic.com/media/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg"></div>
+<div class="float-item" onclick="openDetail('codex')"><img src="https://static.wixstatic.com/media/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg"></div>
+</div>
+<div class="float-grid bottom-row">
+<div class="float-item" onclick="openDetail('chair1011')"><img src="https://static.wixstatic.com/media/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg"></div>
+</div>
 </div>
 
-<!-- Floating art works -->
+<!-- ART FLOATS -->
 <div class="float-container hidden" id="float-art">
-<div class="float-item" style="width:280px;height:180px;top:8%;left:8%" onclick="openDetail('flow')"><img src="https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_560,h_360,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg"></div>
-<div class="float-item" style="width:260px;height:190px;top:5%;left:44%" onclick="openDetail('rippling')"><img src="https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_520,h_380,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg"></div>
-<div class="float-item" style="width:290px;height:210px;top:14%;right:3%" onclick="openDetail('genesis')"><img src="https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_580,h_420,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg"></div>
-<div class="float-item" style="width:300px;height:200px;top:52%;left:5%" onclick="openDetail('flowddw')"><img src="https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_600,h_400,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg"></div>
-<div class="float-item" style="width:270px;height:190px;top:58%;right:8%" onclick="openDetail('emotion')"><img src="https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_540,h_380,q_85,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg"></div>
+<div class="float-grid left-col">
+<div class="float-item" onclick="openDetail('flow')"><img src="https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg"></div>
+<div class="float-item" onclick="openDetail('rippling')"><img src="https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_520,h_340,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg"></div>
+</div>
+<div class="float-grid right-col">
+<div class="float-item" onclick="openDetail('genesis')"><img src="https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_520,h_340,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg"></div>
+<div class="float-item" onclick="openDetail('flowddw')"><img src="https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_520,h_340,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg"></div>
+</div>
+<div class="float-grid bottom-row">
+<div class="float-item" onclick="openDetail('emotion')"><img src="https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_520,h_340,q_85,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg"></div>
+</div>
 </div>
 
-<!-- Floating research items -->
+<!-- RESEARCH FLOATS -->
 <div class="float-container hidden" id="float-research">
-<div class="float-pub" style="top:9%;left:4%;width:400px" onclick="window.open('https://doi.org/10.2196/67190','_blank')"><strong>Journal Papers</strong></div>
-<div class="float-pub" style="top:18%;left:4%;width:400px" onclick="window.open('https://doi.org/10.2196/67190','_blank')"><strong>Zhang, Z.</strong> et al. (2025) HCPs' Engagement With DMHIs in UK and China. <em>JMIR Mental Health</em> <a href="https://doi.org/10.2196/67190" target="_blank">DOI↗</a></div>
-<div class="float-pub" style="top:30%;left:4%;width:400px" onclick="window.open('https://doi.org/10.34133/cbsystems.0098','_blank')">Wang, X., <strong>Zhang, Z.</strong> et al. (2024) Robotic teleoperation with AR. <em>Cyborg & Bionic Systems</em> <a href="https://doi.org/10.34133/cbsystems.0098" target="_blank">DOI↗</a></div>
-<div class="float-pub" style="top:42%;left:4%;width:400px" onclick="window.open('https://doi.org/10.2196/40360','_blank')">Seah, <strong>Zhang, Z.</strong> et al. (2022) Mindfulness agents for dementia. <em>JMIR Aging</em> <a href="https://doi.org/10.2196/40360" target="_blank">DOI↗</a></div>
-<div class="float-pub" style="top:54%;left:4%;width:400px" onclick="window.open('https://doi.org/10.2196/40933','_blank')">Sun, <strong>Zhang, Z.</strong> et al. (2022) Mental Health Tech for Chinese Employees. <em>JMIR HF</em> <a href="https://doi.org/10.2196/40933" target="_blank">DOI↗</a></div>
-<div class="float-pub" style="top:9%;right:4%;width:400px"><strong>Conference Papers</strong></div>
-<div class="float-pub" style="top:18%;right:4%;width:400px"><strong>Zhang, Z.</strong> et al. Workplace Relatedness Support for HCPs. <em>CHI 2026</em> <span class="award-tag">Hon. Mention</span></div>
-<div class="float-pub" style="top:30%;right:4%;width:400px" onclick="window.open('https://doi.org/10.1145/3706598.3714042','_blank')"><strong>Zhang, Z.</strong> et al. (2025) Beyond Wellbeing Apps. <em>ACM DIS</em> <a href="https://doi.org/10.1145/3706598.3714042" target="_blank">DOI↗</a></div>
-<div class="float-pub" style="top:42%;right:4%;width:400px">Sun, <strong>Zhang, Z.</strong> et al. (2025) Culturally Adapted DMH Design. <em>BCS HCI</em> <span class="award-tag">Best Paper</span></div>
-<div class="float-pub" style="top:54%;right:4%;width:400px" onclick="window.open('https://doi.org/10.1145/3544793.3560398','_blank')">Seah, <strong>Zhang, Z.</strong> et al. (2022) Mindfulness CA. <em>UbiComp</em> <a href="https://doi.org/10.1145/3544793.3560398" target="_blank">DOI↗</a></div>
+<div class="float-grid left-col">
+<div class="float-pub" style="font-weight:700;border:none;box-shadow:none;background:transparent;padding-left:0">Journal Papers</div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.2196/67190','_blank')"><strong>Zhang, Z.</strong> et al. (2025) HCPs' Engagement With DMHIs. <em>JMIR MH</em> <a href="https://doi.org/10.2196/67190" target="_blank">DOI↗</a></div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.34133/cbsystems.0098','_blank')">Wang, <strong>Zhang, Z.</strong> et al. (2024) Robotic teleoperation. <em>Cyborg &amp; Bionic</em> <a href="https://doi.org/10.34133/cbsystems.0098" target="_blank">DOI↗</a></div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.2196/40360','_blank')">Seah, <strong>Zhang, Z.</strong> et al. (2022) Mindfulness agents. <em>JMIR Aging</em> <a href="https://doi.org/10.2196/40360" target="_blank">DOI↗</a></div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.2196/40933','_blank')">Sun, <strong>Zhang, Z.</strong> et al. (2022) MH Tech. <em>JMIR HF</em> <a href="https://doi.org/10.2196/40933" target="_blank">DOI↗</a></div>
+</div>
+<div class="float-grid right-col">
+<div class="float-pub" style="font-weight:700;border:none;box-shadow:none;background:transparent;padding-left:0">Conference Papers</div>
+<div class="float-pub"><strong>Zhang, Z.</strong> et al. Relatedness for HCPs. <em>CHI 2026</em> <span class="at">Hon. Mention</span></div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.1145/3706598.3714042','_blank')"><strong>Zhang, Z.</strong> et al. (2025) Beyond Wellbeing Apps. <em>DIS</em> <a href="https://doi.org/10.1145/3706598.3714042" target="_blank">DOI↗</a></div>
+<div class="float-pub">Sun, <strong>Zhang, Z.</strong> et al. (2025) Culturally Adapted DMH. <em>BCS HCI</em> <span class="at">Best Paper</span></div>
+<div class="float-pub" onclick="window.open('https://doi.org/10.1145/3544793.3560398','_blank')">Seah, <strong>Zhang, Z.</strong> et al. (2022) Mindfulness CA. <em>UbiComp</em> <a href="https://doi.org/10.1145/3544793.3560398" target="_blank">DOI↗</a></div>
+</div>
 </div>
 
 <div class="bio">I am Zheyuan Zhang, born in Lanzhou, Gansu province, China. I am a final-year PhD student at Dyson School of Design Engineering, Imperial College London. I graduated from Tongji University in 2017 and got my postgraduate degree in Innovation Design Engineering (IDE) at the Royal College of Art and Imperial College London in 2019.</div>
-
 <div class="social">
-<a href="https://www.linkedin.com/in/zheyuan-zhang/" target="_blank"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
-<a href="mailto:zheyuan.zhang17@imperial.ac.uk"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Email</a>
-<a href="https://www.instagram.com/" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</a>
+<a href="https://www.linkedin.com/in/zheyuan-zhang-855244121/" target="_blank"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span>LinkedIn</span></a>
+<a href="mailto:zheyuan.zhang17@imperial.ac.uk"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>Email</span></a>
+<a href="cv.pdf" target="_blank"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.01V13h3v-2h2v2h3v2.01h-3V17h-2v-1.99H8z"/></svg><span>CV</span></a>
 </div>
-
 <div class="scroll-hint" id="scrollHint">← Drag to explore →</div>
 </div>
 
-<!-- CONTENT PAGES (Design, Research, Art, Experience) -->
-<div class="content-page" id="page-design"><div class="content-inner">
-<button class="content-back" onclick="closePage('design')">← Back</button>
-<h1 class="content-title">Design</h1>
-<div class="works-grid">
+<!-- PAGES -->
+<div class="content-page" id="page-design"><div class="content-inner"><button class="content-back" onclick="closePage('design')">← Back</button><h1 class="content-title">Design</h1><div class="works-grid">
 <div class="work-card" onclick="openDetail('cutia')"><img src="https://static.wixstatic.com/media/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg"><div class="wc-info"><h3>Cutia</h3><p>2018</p></div></div>
 <div class="work-card" onclick="openDetail('whisper')"><img src="https://static.wixstatic.com/media/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg"><div class="wc-info"><h3>Whisper</h3><p>2018</p></div></div>
 <div class="work-card" onclick="openDetail('crescent')"><img src="https://static.wixstatic.com/media/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg"><div class="wc-info"><h3>Crescent</h3><p>2016</p></div></div>
@@ -191,194 +187,164 @@ img{display:block;max-width:100%}
 <div class="work-card" onclick="openDetail('dovetail')"><img src="https://static.wixstatic.com/media/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg"><div class="wc-info"><h3>Dovetail Stool</h3><p>2016</p></div></div>
 <div class="work-card" onclick="openDetail('chair1011')"><img src="https://static.wixstatic.com/media/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg"><div class="wc-info"><h3>1011 Chair</h3><p>2017</p></div></div>
 </div></div></div>
-
-<div class="content-page" id="page-research"><div class="content-inner">
-<button class="content-back" onclick="closePage('research')">← Back</button>
-<h1 class="content-title">Research</h1>
-<div class="pub-columns"><div>
-<div class="pub-section"><div class="pub-section-title">Journal Papers</div>
-<div class="pub-entry"><strong>Zhang, Z.</strong> et al. (2025). HCPs' Engagement With DMHIs in UK and China. <em>JMIR Mental Health</em>, 12(1), e67190. <a href="https://doi.org/10.2196/67190" target="_blank">DOI↗</a></div>
-<div class="pub-entry"><strong>Zhang, Z.</strong> et al. Challenges in Promoting MH Interventions in China. <em>BMC HSR</em> (Under Review).</div>
-<div class="pub-entry">Wang et al. incl. <strong>Zhang, Z.</strong> (2024). Robotic teleoperation with AR. <em>Cyborg & Bionic Sys.</em> <a href="https://doi.org/10.34133/cbsystems.0098" target="_blank">DOI↗</a></div>
-<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2024). BA activities for Chinese employees. <em>PLOS MH</em>. <a href="https://doi.org/10.1371/journal.pmen.0000190" target="_blank">DOI↗</a></div>
-<div class="pub-entry">Seah, <strong>Zhang, Z.</strong> et al. (2022). Mindfulness agents for dementia. <em>JMIR Aging</em>. <a href="https://doi.org/10.2196/40360" target="_blank">DOI↗</a></div>
-<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2022). MH Support Tech for Chinese Employees. <em>JMIR HF</em>. <a href="https://doi.org/10.2196/40933" target="_blank">DOI↗</a></div>
-</div></div><div>
-<div class="pub-section"><div class="pub-section-title">Conference Papers</div>
-<div class="pub-entry"><strong>Zhang, Z.</strong> et al. Workplace Relatedness for HCPs. <em>CHI 2026</em>. <span class="award-tag">Hon. Mention</span></div>
-<div class="pub-entry"><strong>Zhang, Z.</strong> et al. (2025). Beyond Wellbeing Apps. <em>ACM DIS</em>. <a href="https://doi.org/10.1145/3706598.3714042" target="_blank">DOI↗</a></div>
-<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2025). Culturally Adapted DMH Design. <em>BCS HCI</em>. <span class="award-tag">Best Paper</span></div>
-<div class="pub-entry">Ye, <strong>Zhang, Z.</strong> et al. (2025). Digitizing Intangible Cultural Heritage. <em>IASDR</em>.</div>
+<div class="content-page" id="page-research"><div class="content-inner"><button class="content-back" onclick="closePage('research')">← Back</button><h1 class="content-title">Research</h1><div class="pub-columns"><div><div class="pub-section"><div class="pub-section-title">Journal Papers</div>
+<div class="pub-entry"><strong>Zhang, Z.</strong> et al. (2025). HCPs' Engagement With DMHIs. <em>JMIR MH</em>. <a href="https://doi.org/10.2196/67190" target="_blank">DOI↗</a></div>
+<div class="pub-entry"><strong>Zhang, Z.</strong> et al. Challenges in Promoting MH Interventions. <em>BMC HSR</em> (Under Review).</div>
+<div class="pub-entry">Wang et al. incl. <strong>Zhang, Z.</strong> (2024). Robotic teleoperation. <em>Cyborg &amp; Bionic</em>. <a href="https://doi.org/10.34133/cbsystems.0098" target="_blank">DOI↗</a></div>
+<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2024). BA for Chinese employees. <em>PLOS MH</em>. <a href="https://doi.org/10.1371/journal.pmen.0000190" target="_blank">DOI↗</a></div>
+<div class="pub-entry">Seah, <strong>Zhang, Z.</strong> et al. (2022). Mindfulness agents. <em>JMIR Aging</em>. <a href="https://doi.org/10.2196/40360" target="_blank">DOI↗</a></div>
+<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2022). MH Support Tech. <em>JMIR HF</em>. <a href="https://doi.org/10.2196/40933" target="_blank">DOI↗</a></div>
+</div></div><div><div class="pub-section"><div class="pub-section-title">Conference Papers</div>
+<div class="pub-entry"><strong>Zhang, Z.</strong> et al. Relatedness for HCPs. <em>CHI 2026</em>. <span class="at">Hon. Mention</span></div>
+<div class="pub-entry"><strong>Zhang, Z.</strong> et al. (2025). Beyond Wellbeing Apps. <em>DIS</em>. <a href="https://doi.org/10.1145/3706598.3714042" target="_blank">DOI↗</a></div>
+<div class="pub-entry">Sun, <strong>Zhang, Z.</strong> et al. (2025). Culturally Adapted DMH. <em>BCS HCI</em>. <span class="at">Best Paper</span></div>
+<div class="pub-entry">Ye, <strong>Zhang, Z.</strong> et al. (2025). Cultural Heritage. <em>IASDR</em>.</div>
 <div class="pub-entry">Seah, <strong>Zhang, Z.</strong> et al. (2022). Mindfulness CA. <em>UbiComp</em>. <a href="https://doi.org/10.1145/3544793.3560398" target="_blank">DOI↗</a></div>
-</div></div></div>
-<a href="https://scholar.google.com/citations?user=0ehB0sEAAAAJ&hl=en" target="_blank" class="btn">View Google Scholar →</a>
-</div></div>
-
-<div class="content-page" id="page-art"><div class="content-inner">
-<button class="content-back" onclick="closePage('art')">← Back</button>
-<h1 class="content-title">Art</h1>
-<p style="font-size:17px;color:var(--fg-muted);line-height:1.7;max-width:640px;margin-bottom:48px">Through <strong>Studio Inneract</strong>, I create immersive, interactive digital art — fostering wellbeing through emotionally engaging experiences.</p>
-<div class="works-grid">
+</div></div></div><a href="https://scholar.google.com/citations?user=0ehB0sEAAAAJ&hl=en" target="_blank" class="btn">Google Scholar →</a></div></div>
+<div class="content-page" id="page-art"><div class="content-inner"><button class="content-back" onclick="closePage('art')">← Back</button><h1 class="content-title">Art</h1><p style="font-size:clamp(14px,1.6vw,17px);color:var(--fg-muted);line-height:1.7;max-width:640px;margin-bottom:40px">Through <strong>Studio Inneract</strong>, I create immersive, interactive digital art — fostering wellbeing through emotionally engaging experiences.</p><div class="works-grid">
 <div class="work-card" onclick="openDetail('flow')"><img src="https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_640,h_480,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg"><div class="wc-info"><h3>Flow</h3><p>West Middlesex Hospital</p></div></div>
 <div class="work-card" onclick="openDetail('flowddw')"><img src="https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_640,h_480,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg"><div class="wc-info"><h3>Flow (Beta)</h3><p>DDW 2024</p></div></div>
 <div class="work-card" onclick="openDetail('rippling')"><img src="https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_640,h_480,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg"><div class="wc-info"><h3>Rippling Senses</h3><p>DDW 2022</p></div></div>
 <div class="work-card" onclick="openDetail('genesis')"><img src="https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_640,h_480,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg"><div class="wc-info"><h3>Genesis Screens</h3><p>Saatchi Gallery</p></div></div>
 <div class="work-card" onclick="openDetail('emotion')"><img src="https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_640,h_480,q_90,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg"><div class="wc-info"><h3>(E)motion</h3><p>Westbund 2020</p></div></div>
-</div>
-<a href="https://www.studio-inneract.cc/" target="_blank" class="btn">Visit Studio Inneract →</a>
+</div><a href="https://www.studio-inneract.cc/" target="_blank" class="btn">Studio Inneract →</a></div></div>
+<div class="content-page" id="page-experience"><div class="content-inner"><button class="content-back" onclick="closePage('experience')">← Back</button><h1 class="content-title">Experience</h1>
+<div class="pub-section"><div class="pub-section-title">Education</div><div class="pub-entry"><strong>PhD Design Engineering</strong> · Imperial College London · 2021–2026</div><div class="pub-entry"><strong>MSc/MA IDE</strong> · Imperial &amp; RCA · 2017–2019</div><div class="pub-entry"><strong>BEng Industrial Design</strong> · Tongji University · 2013–2017</div></div>
+<div class="pub-section"><div class="pub-section-title">Work</div><div class="pub-entry"><strong>Founder</strong> · Studio Inneract · 2019–Now</div><div class="pub-entry"><strong>Industrial Designer</strong> · Blond · 2019–2020</div></div>
+<div class="pub-section"><div class="pub-section-title">Teaching</div><div class="pub-entry"><strong>TA</strong> · Imperial · 2024–2025</div><div class="pub-entry"><strong>Visiting Lecturer</strong> · Tongji · 2022</div><div class="pub-entry"><strong>Module Leader</strong> · China Academy of Art · 2020–2021</div></div>
+<div class="pub-section"><div class="pub-section-title">Exhibitions</div><div class="pub-entry"><strong>Dutch Design Week</strong> · 2024, 2022</div><div class="pub-entry"><strong>Saatchi Gallery</strong> · 2021</div><div class="pub-entry"><strong>Westbund Art Centre</strong> · 2020</div></div>
 </div></div>
-
-<div class="content-page" id="page-experience"><div class="content-inner">
-<button class="content-back" onclick="closePage('experience')">← Back</button>
-<h1 class="content-title">Experience</h1>
-<div class="pub-section"><div class="pub-section-title">Education</div>
-<div class="pub-entry"><strong>PhD Design Engineering</strong> · Imperial College London · 2021–2026</div>
-<div class="pub-entry"><strong>MSc/MA Innovation Design Engineering</strong> · Imperial & RCA · 2017–2019</div>
-<div class="pub-entry"><strong>BEng Industrial Design</strong> · Tongji University · 2013–2017</div></div>
-<div class="pub-section"><div class="pub-section-title">Work</div>
-<div class="pub-entry"><strong>Founder & Designer</strong> · Studio Inneract · 2019–Now</div>
-<div class="pub-entry"><strong>Industrial Designer</strong> · Blond, London · 2019–2020</div></div>
-<div class="pub-section"><div class="pub-section-title">Teaching</div>
-<div class="pub-entry"><strong>TA</strong> · Responsible Design Engineering · Imperial · 2024–2025</div>
-<div class="pub-entry"><strong>Visiting Lecturer</strong> · Tongji University · 2022</div>
-<div class="pub-entry"><strong>Visiting Lecturer & Module Leader</strong> · China Academy of Art · 2020–2021</div></div>
-<div class="pub-section"><div class="pub-section-title">Exhibitions</div>
-<div class="pub-entry"><strong>Dutch Design Week</strong> · Eindhoven · 2024, 2022</div>
-<div class="pub-entry"><strong>Saatchi Gallery</strong> · The Healing Art · 2021</div>
-<div class="pub-entry"><strong>Westbund Art Centre</strong> · FutureLab · 2020</div></div>
-</div></div>
-
-<!-- DETAIL PAGE -->
-<div class="detail-page" id="detail-page"><div class="detail-inner">
-<button class="content-back" onclick="closeDetail()">← Back</button>
-<img class="detail-hero" id="detail-img" src="">
-<h1 class="detail-h1" id="detail-title"></h1>
-<div class="detail-meta" id="detail-meta"></div>
-<div class="detail-body" id="detail-body"></div>
-<div class="detail-gallery" id="detail-gallery"></div>
-</div></div>
+<div class="detail-page" id="detail-page"><div class="detail-inner"><button class="content-back" onclick="closeDetail()">← Back</button><img class="detail-hero" id="detail-img" src=""><h1 class="detail-h1" id="detail-title"></h1><div class="detail-meta" id="detail-meta"></div><div class="detail-body" id="detail-body"></div><div class="detail-gallery" id="detail-gallery"></div></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const projects={
-cutia:{title:'Cutia',meta:'Design Research · UX · 2018',hero:'https://static.wixstatic.com/media/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg',body:'<p>Cutia is a phobia treatment platform using AI-generated cartoon-style images for exposure therapy, leveraging dcGAN to counter fear with cuteness.</p>',gallery:['https://static.wixstatic.com/media/c7de83_575a9195099f42f58aa82374a7f105da~mv2_d_4962_2481_s_4_2.jpg/v1/fill/w_960,h_480,q_90,enc_avif,quality_auto/c7de83_575a9195099f42f58aa82374a7f105da~mv2_d_4962_2481_s_4_2.jpg','https://static.wixstatic.com/media/c7de83_fc5b5c66ab2b450babb7915a19867c19~mv2_d_9200_4593_s_4_2.jpg/v1/fill/w_960,h_480,q_90,enc_avif,quality_auto/c7de83_fc5b5c66ab2b450babb7915a19867c19~mv2_d_9200_4593_s_4_2.jpg']},
-whisper:{title:'Whisper',meta:'Product Design · UX · 2018',hero:'https://static.wixstatic.com/media/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg',body:'<p>Whisper provides analytical reflection on social media. The Shell device whispers keywords when held near the ear, breaking echo chambers.</p>',gallery:['https://static.wixstatic.com/media/c7de83_c47ff0e0130b4c0888b5ed7caf31c580~mv2_d_6261_3780_s_4_2.jpg/v1/fill/w_960,h_580,q_90,enc_avif,quality_auto/c7de83_c47ff0e0130b4c0888b5ed7caf31c580~mv2_d_6261_3780_s_4_2.jpg']},
-crescent:{title:'Crescent',meta:'Product Design · 2016',hero:'https://static.wixstatic.com/media/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg',body:'<p>Crescent generates meditation music based on respiratory data, providing gentle breath feedback through speed and volume changes.</p>',gallery:['https://static.wixstatic.com/media/c7de83_abec754a82894ddba8411480f2f87450~mv2_d_3840_2160_s_2.jpg/v1/fill/w_960,h_540,q_90,enc_avif,quality_auto/c7de83_abec754a82894ddba8411480f2f87450~mv2_d_3840_2160_s_2.jpg']},
-comtour:{title:'Comtour',meta:'Product Design · 2017',hero:'https://static.wixstatic.com/media/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg',body:'<p>Dual-mode electric bike. Two batteries for weekday commuting and weekend trips. 28-day metalwork prototype.</p>',gallery:['https://static.wixstatic.com/media/c7de83_4522300e123c41c7b4564591c6583ff1~mv2_d_4961_3509_s_4_2.jpg/v1/fill/w_960,h_680,q_90,enc_avif,quality_auto/c7de83_4522300e123c41c7b4564591c6583ff1~mv2_d_4961_3509_s_4_2.jpg']},
-codex:{title:'Codex',meta:'Installation · 2018',hero:'https://static.wixstatic.com/media/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg',body:'<p>Light & sound installation responsive to voice and proximity.</p>',gallery:[]},
-dovetail:{title:'Dovetail Stool',meta:'Wood Work · 2016',hero:'https://static.wixstatic.com/media/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg',body:'<p>Supported with only dovetail joints, celebrating Chinese wood joinery craftsmanship.</p>',gallery:['https://static.wixstatic.com/media/c7de83_5de778ce3b3041d48106e1284376bdd0~mv2_d_4962_2080_s_2.jpg/v1/fill/w_960,h_400,q_90,enc_avif,quality_auto/c7de83_5de778ce3b3041d48106e1284376bdd0~mv2_d_4962_2080_s_2.jpg']},
-chair1011:{title:'1011 Chair',meta:'Wood Work · 2017',hero:'https://static.wixstatic.com/media/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg',body:'<p>1 Chair, 0 metal, 1 part, 1 joint. Minimal manufacturing waste.</p>',gallery:['https://static.wixstatic.com/media/c7de83_f0e2869e05ae4ca0aecba69076744204~mv2_d_4961_2125_s_2.jpg/v1/fill/w_960,h_410,q_90,enc_avif,quality_auto/c7de83_f0e2869e05ae4ca0aecba69076744204~mv2_d_4961_2125_s_2.jpg']},
-flow:{title:'Flow',meta:'Permanent · West Middlesex Hospital',hero:'https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_1400,h_700,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg',body:'<p>Immersive digital art permanently at West Middlesex University Hospital. Featured in The Art Newspaper and more.</p>',gallery:[]},
-flowddw:{title:'Flow (Beta)',meta:'DDW 2024',hero:'https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg',body:'<p>Exhibited at Dutch Design Week 2024, Design Museum and Kazerne.</p>',gallery:[]},
-rippling:{title:'Rippling Senses',meta:'DDW 2022 · Chelsea & Westminster',hero:'https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg',body:'<p>Multi-sensory immersive experiences promoting wellbeing in clinical settings.</p>',gallery:[]},
-genesis:{title:'Genesis Screens',meta:'Saatchi Gallery · 2021',hero:'https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg',body:'<p>Shown at Saatchi Gallery as part of "The Healing Art" and at Chelsea and Westminster Hospital.</p>',gallery:[]},
-emotion:{title:'(E)motion Synchronised',meta:'Westbund Art Centre · 2020',hero:'https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg',body:'<p>Emotion and motion synchronisation through interactive digital art at FutureLab.</p>',gallery:[]}
-};
+const projects={cutia:{title:'Cutia',meta:'Design Research · UX · 2018',hero:'https://static.wixstatic.com/media/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_d5f3f4999494428084369c70a2fb309a~mv2_d_8696_4341_s_4_2.jpg',body:'<p>AI phobia treatment platform using dcGAN to counter fear with cuteness.</p>',gallery:['https://static.wixstatic.com/media/c7de83_575a9195099f42f58aa82374a7f105da~mv2_d_4962_2481_s_4_2.jpg/v1/fill/w_960,h_480,q_90,enc_avif,quality_auto/c7de83_575a9195099f42f58aa82374a7f105da~mv2_d_4962_2481_s_4_2.jpg','https://static.wixstatic.com/media/c7de83_fc5b5c66ab2b450babb7915a19867c19~mv2_d_9200_4593_s_4_2.jpg/v1/fill/w_960,h_480,q_90,enc_avif,quality_auto/c7de83_fc5b5c66ab2b450babb7915a19867c19~mv2_d_9200_4593_s_4_2.jpg']},whisper:{title:'Whisper',meta:'Product Design · 2018',hero:'https://static.wixstatic.com/media/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_98a1e0967cac4a4b8194a3fb2a4962a1~mv2_d_6383_3648_s_4_2.jpg',body:'<p>Shell device whispers social media keywords, breaking echo chambers.</p>',gallery:['https://static.wixstatic.com/media/c7de83_c47ff0e0130b4c0888b5ed7caf31c580~mv2_d_6261_3780_s_4_2.jpg/v1/fill/w_960,h_580,q_90,enc_avif,quality_auto/c7de83_c47ff0e0130b4c0888b5ed7caf31c580~mv2_d_6261_3780_s_4_2.jpg']},crescent:{title:'Crescent',meta:'Product Design · 2016',hero:'https://static.wixstatic.com/media/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_ff5e03a3664546458868cf83c50dd941~mv2_d_2999_1865_s_2.jpg',body:'<p>Meditation speaker with breath-responsive music.</p>',gallery:[]},comtour:{title:'Comtour',meta:'Product Design · 2017',hero:'https://static.wixstatic.com/media/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_127f82a5d28b43a39520785729a1a8ee~mv2_d_3675_2357_s_2.jpg',body:'<p>Dual-mode electric bike with 28-day metalwork prototype.</p>',gallery:[]},codex:{title:'Codex',meta:'Installation · 2018',hero:'https://static.wixstatic.com/media/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_385735e19a7b4911afe9aafaa791a5c5~mv2_d_3000_1632_s_2.jpg',body:'<p>Light &amp; sound installation responsive to voice.</p>',gallery:[]},dovetail:{title:'Dovetail Stool',meta:'Wood Work · 2016',hero:'https://static.wixstatic.com/media/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_044bd739d1cc4f01b02d761f3ebfb4e8~mv2_d_5000_3535_s_4_2.jpg',body:'<p>Chinese wood joinery craftsmanship.</p>',gallery:[]},chair1011:{title:'1011 Chair',meta:'Wood Work · 2017',hero:'https://static.wixstatic.com/media/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_40f17153ec4c4f09a009f171a93a94e1~mv2_d_2590_1594_s_2.jpg',body:'<p>1 part, 1 joint, 0 metal.</p>',gallery:[]},flow:{title:'Flow',meta:'West Middlesex Hospital',hero:'https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_1400,h_700,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg',body:'<p>Permanent immersive healing art.</p>',gallery:[]},flowddw:{title:'Flow (Beta)',meta:'DDW 2024',hero:'https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg',body:'<p>Dutch Design Week 2024.</p>',gallery:[]},rippling:{title:'Rippling Senses',meta:'DDW 2022',hero:'https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg',body:'<p>Multi-sensory clinical wellbeing.</p>',gallery:[]},genesis:{title:'Genesis Screens',meta:'Saatchi Gallery · 2021',hero:'https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_1400,h_700,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg',body:'<p>The Healing Art exhibition.</p>',gallery:[]},emotion:{title:'(E)motion Synchronised',meta:'Westbund · 2020',hero:'https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_1400,h_700,q_90,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg',body:'<p>FutureLab interactive art.</p>',gallery:[]}};
 
-// THREE.JS - Tetrahedron (三棱锥)
 const canvas=document.getElementById('three-canvas');
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xFAFAF8);
-const camera=new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,0.1,100);
-camera.position.set(0,0.6,5.5);
+const mob=window.innerWidth<768;
+const camera=new THREE.PerspectiveCamera(mob?50:40,window.innerWidth/window.innerHeight,0.1,100);
+// Camera positioned to look slightly down at the pyramid centered in viewport
+camera.position.set(0,mob?1.5:1.8,mob?4.5:5.2);
+camera.lookAt(0,mob?0.4:0.5,0);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
 renderer.setSize(window.innerWidth,window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 
-const geo=new THREE.TetrahedronGeometry(1.6,0);
-const mat=new THREE.MeshPhysicalMaterial({color:0xc5c5c0,metalness:0.05,roughness:0.3,clearcoat:0.6,clearcoatRoughness:0.08,reflectivity:0.4,side:THREE.DoubleSide,flatShading:true});
+// Tetrahedron standing on flat base, centered at origin
+const S=mob?1.0:1.4;
+const pyH=S*1.8;
+const baseR=S*1.0;
+// 3 base vertices forming equilateral triangle on y=0
+const b0=new THREE.Vector3(baseR,0,0);
+const b1=new THREE.Vector3(-baseR*0.5,0,baseR*0.866);
+const b2=new THREE.Vector3(-baseR*0.5,0,-baseR*0.866);
+const apex=new THREE.Vector3(0,pyH,0);
+const geo=new THREE.BufferGeometry();
+const verts=new Float32Array([
+  // Face 0 (front): b0, b1, apex
+  ...b0.toArray(),...b1.toArray(),...apex.toArray(),
+  // Face 1 (back-right): b1, b2, apex
+  ...b1.toArray(),...b2.toArray(),...apex.toArray(),
+  // Face 2 (back-left): b2, b0, apex
+  ...b2.toArray(),...b0.toArray(),...apex.toArray(),
+  // Base: b0, b2, b1
+  ...b0.toArray(),...b2.toArray(),...b1.toArray()
+]);
+const norms=new Float32Array(36);
+for(let i=0;i<4;i++){
+  const a=new THREE.Vector3().fromArray(verts,i*9);
+  const b=new THREE.Vector3().fromArray(verts,i*9+3);
+  const c=new THREE.Vector3().fromArray(verts,i*9+6);
+  const n=new THREE.Vector3().subVectors(b,a).cross(new THREE.Vector3().subVectors(c,a)).normalize();
+  norms.set([...n.toArray(),...n.toArray(),...n.toArray()],i*9);
+}
+geo.setAttribute('position',new THREE.BufferAttribute(verts,3));
+geo.setAttribute('normal',new THREE.BufferAttribute(norms,3));
+const mat=new THREE.MeshPhysicalMaterial({color:0xc8c8c4,metalness:0.04,roughness:0.28,clearcoat:0.65,clearcoatRoughness:0.06,reflectivity:0.5,flatShading:true,side:THREE.DoubleSide});
 const tetra=new THREE.Mesh(geo,mat);
-tetra.rotation.x=0.15;
+// Shift down so it's visually centered
+tetra.position.y=-pyH*0.35;
 scene.add(tetra);
-const edges=new THREE.EdgesGeometry(geo);
-const lineMat=new THREE.LineBasicMaterial({color:0x999,transparent:true,opacity:0.25});
-const wire=new THREE.LineSegments(edges,lineMat);
-wire.rotation.x=0.15;
+const wire=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:0x999,transparent:true,opacity:0.2}));
+wire.position.y=tetra.position.y;
 scene.add(wire);
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+const d1=new THREE.DirectionalLight(0xffffff,0.75);d1.position.set(4,6,5);scene.add(d1);
+const d2=new THREE.DirectionalLight(0xffffff,0.2);d2.position.set(-3,2,-4);scene.add(d2);
 
-scene.add(new THREE.AmbientLight(0xffffff,0.65));
-const d1=new THREE.DirectionalLight(0xffffff,0.7);d1.position.set(4,5,6);scene.add(d1);
-const d2=new THREE.DirectionalLight(0xffffff,0.25);d2.position.set(-3,2,-3);scene.add(d2);
+// Face normals for the 3 side faces (not base)
+const faceNormals=[];
+for(let i=0;i<3;i++){
+  faceNormals.push(new THREE.Vector3(norms[i*9],norms[i*9+1],norms[i*9+2]));
+}
 
-// Rotation
 const faces=['design','research','art'];
-const faceAngles=[0,2*Math.PI/3,4*Math.PI/3];
 let currentAngle=0,targetAngle=0,isDragging=false,dragStartX=0,dragStartAngle=0;
-let autoRotate=true,autoSpeed=0.0015,idleTimer=null,activeFace=0,lastFace=-1;
+let autoRotate=true,autoSpeed=0.0015,idleTimer=null,lastFace=-1;
 
-function getFaceIndex(a){
-  let n=((a%(2*Math.PI))+(2*Math.PI))%(2*Math.PI);
-  if(n<Math.PI/3||n>=5*Math.PI/3)return 0;
-  if(n>=Math.PI/3&&n<Math.PI)return 1;
-  return 2;
+function getActiveFace(){
+  const camDir=new THREE.Vector3(0,0,1);
+  let best=0,bestDot=-Infinity;
+  for(let i=0;i<3;i++){
+    const n=faceNormals[i].clone().applyAxisAngle(new THREE.Vector3(0,1,0),currentAngle);
+    const d=n.dot(camDir);
+    if(d>bestDot){bestDot=d;best=i}
+  }
+  return best;
 }
 
 function updateLabels(){
-  const idx=getFaceIndex(currentAngle);
+  const idx=getActiveFace();
   const ids=['label-design','label-research','label-art'];
-  const names=['Design','Research','Art'];
-  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  const cx=window.innerWidth/2;
+  const cy=window.innerHeight*(mob?0.48:0.50);
+  const off=mob?80:180;
+  const big=Math.min(mob?38:72,window.innerWidth*(mob?0.1:0.055));
+  const small=Math.min(mob?13:20,window.innerWidth*(mob?0.035:0.015));
   ids.forEach((id,i)=>{
     const el=document.getElementById(id);
     if(i===idx){
-      el.style.cssText=`left:${cx}px;top:${cy+20}px;transform:translate(-50%,-50%);font-size:${Math.min(80,window.innerWidth*0.06)}px;color:#111;z-index:5`;
+      el.style.cssText=`left:${cx}px;top:${cy+16}px;transform:translate(-50%,-50%);font-size:${big}px;color:#111`;
     } else {
-      const prev=(idx+2)%3, next=(idx+1)%3;
-      if(i===prev){
-        el.style.cssText=`left:${cx-200}px;top:${cy-60}px;transform:translate(-50%,-50%);font-size:${Math.min(22,window.innerWidth*0.016)}px;color:#999;z-index:5`;
-      } else {
-        el.style.cssText=`left:${cx+200}px;top:${cy-60}px;transform:translate(-50%,-50%);font-size:${Math.min(22,window.innerWidth*0.016)}px;color:#999;z-index:5`;
-      }
+      const prev=(idx+2)%3;
+      const x=i===prev?cx-off:cx+off;
+      el.style.cssText=`left:${x}px;top:${cy-(mob?40:55)}px;transform:translate(-50%,-50%);font-size:${small}px;color:#999`;
     }
   });
-  if(idx!==lastFace){
-    lastFace=idx;
-    showFloats(idx);
-  }
-  activeFace=idx;
+  if(idx!==lastFace){lastFace=idx;showFloats(idx)}
 }
 
 function showFloats(idx){
-  const containers=['float-design','float-research','float-art'];
-  containers.forEach((id,i)=>{
+  ['float-design','float-research','float-art'].forEach((id,i)=>{
     const c=document.getElementById(id);
     if(i===idx){
       c.classList.remove('hidden');
-      const items=c.querySelectorAll('.float-item,.float-pub');
-      items.forEach((it,j)=>setTimeout(()=>it.classList.add('show'),j*80));
+      c.querySelectorAll('.float-item,.float-pub').forEach((it,j)=>setTimeout(()=>it.classList.add('show'),j*70));
     } else {
       c.querySelectorAll('.float-item,.float-pub').forEach(it=>it.classList.remove('show'));
-      setTimeout(()=>c.classList.add('hidden'),400);
+      setTimeout(()=>c.classList.add('hidden'),350);
     }
   });
 }
 
-// Drag (FIXED direction)
 const cont=document.getElementById('scene-container');
 cont.addEventListener('mousedown',e=>{isDragging=true;dragStartX=e.clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0'});
-window.addEventListener('mousemove',e=>{if(!isDragging)return;const dx=e.clientX-dragStartX;targetAngle=dragStartAngle+dx*0.005});
-window.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;snapToFace();startIdle()}});
-cont.addEventListener('touchstart',e=>{isDragging=true;dragStartX=e.touches[0].clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0'},{passive:true});
-window.addEventListener('touchmove',e=>{if(!isDragging)return;const dx=e.touches[0].clientX-dragStartX;targetAngle=dragStartAngle+dx*0.005},{passive:true});
-window.addEventListener('touchend',()=>{if(isDragging){isDragging=false;snapToFace();startIdle()}});
-cont.addEventListener('wheel',e=>{e.preventDefault();autoRotate=false;clearTimeout(idleTimer);targetAngle-=e.deltaX*0.003+e.deltaY*0.003;document.getElementById('scrollHint').style.opacity='0';clearTimeout(window._st);window._st=setTimeout(()=>{snapToFace();startIdle()},300)},{passive:false});
+window.addEventListener('mousemove',e=>{if(isDragging)targetAngle=dragStartAngle+(e.clientX-dragStartX)*0.005});
+window.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;idle()}});
+cont.addEventListener('touchstart',e=>{isDragging=true;dragStartX=e.touches[0].clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0'},{passive:false});
+window.addEventListener('touchmove',e=>{if(isDragging){e.preventDefault();targetAngle=dragStartAngle+(e.touches[0].clientX-dragStartX)*0.005}},{passive:false});
+window.addEventListener('touchend',()=>{if(isDragging){isDragging=false;idle()}});
+cont.addEventListener('wheel',e=>{e.preventDefault();autoRotate=false;clearTimeout(idleTimer);targetAngle-=(e.deltaX+e.deltaY)*0.003;document.getElementById('scrollHint').style.opacity='0';clearTimeout(window._st);window._st=setTimeout(()=>idle(),300)},{passive:false});
 
-function snapToFace(){
-  let a=((targetAngle%(2*Math.PI))+(2*Math.PI))%(2*Math.PI);
-  let best=0,min=Infinity;
-  faceAngles.forEach((fa,i)=>{let d=Math.abs(a-fa);d=Math.min(d,2*Math.PI-d);if(d<min){min=d;best=i}});
-  let t=faceAngles[best];
-  while(t-targetAngle>Math.PI)t-=2*Math.PI;
-  while(targetAngle-t>Math.PI)t+=2*Math.PI;
-  targetAngle=t;
-}
-function startIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{autoRotate=true},5000)}
+function idle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{autoRotate=true},5000)}
 function lockFace(idx){openPage(faces[idx])}
 
 function animate(){
   requestAnimationFrame(animate);
   if(autoRotate)targetAngle+=autoSpeed;
-  currentAngle+=(targetAngle-currentAngle)*0.05;
+  currentAngle+=(targetAngle-currentAngle)*0.06;
   tetra.rotation.y=currentAngle;
   wire.rotation.y=currentAngle;
   updateLabels();
@@ -386,16 +352,16 @@ function animate(){
 }
 animate();
 showFloats(0);
-setTimeout(()=>document.querySelectorAll('#float-design .float-item').forEach((it,j)=>setTimeout(()=>it.classList.add('show'),j*120)),500);
+setTimeout(()=>document.querySelectorAll('#float-design .float-item').forEach((it,j)=>setTimeout(()=>it.classList.add('show'),j*100)),400);
 
 window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight)});
 
 function openPage(n){document.getElementById('page-'+n).classList.add('open');document.body.style.overflow='auto';autoRotate=false}
-function closePage(n){document.getElementById('page-'+n).classList.remove('open');document.body.style.overflow='hidden';startIdle()}
-function closeAllPages(){document.querySelectorAll('.content-page,.detail-page').forEach(p=>p.classList.remove('open'));document.body.style.overflow='hidden';startIdle()}
+function closePage(n){document.getElementById('page-'+n).classList.remove('open');document.body.style.overflow='hidden';idle()}
+function closeAllPages(){document.querySelectorAll('.content-page,.detail-page').forEach(p=>p.classList.remove('open'));document.body.style.overflow='hidden';idle()}
 function openDetail(k){const p=projects[k];if(!p)return;document.getElementById('detail-img').src=p.hero;document.getElementById('detail-title').textContent=p.title;document.getElementById('detail-meta').textContent=p.meta;document.getElementById('detail-body').innerHTML=p.body;const g=document.getElementById('detail-gallery');g.innerHTML='';(p.gallery||[]).forEach(s=>{const i=document.createElement('img');i.src=s;g.appendChild(i)});document.getElementById('detail-page').classList.add('open');document.body.style.overflow='auto'}
 function closeDetail(){document.getElementById('detail-page').classList.remove('open')}
-startIdle();
+idle();
 </script>
 </body>
 </html>
