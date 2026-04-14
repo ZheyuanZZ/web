@@ -253,15 +253,17 @@ body.theme-dark .orb-pub a{color:#aac}
     overflow-x:auto;
     overflow-y:hidden;
     overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
     padding:0 18px 8px;
     pointer-events:auto;
     scrollbar-width:none;
     z-index:9;
   }
   #float-design,#float-art{
-    scroll-snap-type:x proximity;
-    padding-left:calc(50vw - 56px);
-    padding-right:calc(50vw - 56px);
+    justify-content:space-evenly;
+    overflow:hidden;
+    padding-left:18px;
+    padding-right:18px;
   }
   #float-design::-webkit-scrollbar,#float-art::-webkit-scrollbar,#float-research::-webkit-scrollbar{display:none}
   #float-design .orb,#float-art .orb{
@@ -269,12 +271,12 @@ body.theme-dark .orb-pub a{color:#aac}
     left:auto!important;
     top:auto!important;
     transform:none!important;
-    flex:0 0 112px;
-    width:112px;
-    height:84px;
-    border-radius:18px;
+    flex:0 0 clamp(76px,21vw,104px);
+    width:clamp(76px,21vw,104px);
+    height:clamp(58px,16vw,78px);
+    border-radius:16px;
     align-self:center;
-    scroll-snap-align:center;
+    pointer-events:auto!important;
   }
   #float-design .orb:hover,#float-art .orb:hover{transform:none!important}
   #float-research .float-grid{
@@ -331,8 +333,8 @@ body.theme-dark .orb-pub a{color:#aac}
   .land-links a{flex:1 1 92px;justify-content:center}
   .orb{width:clamp(76px,31vw,106px);height:clamp(60px,24vw,82px);border-radius:16px}
   #float-design,#float-art,#float-research{top:62dvh;height:104px;padding:0 14px 8px}
-  #float-design,#float-art{padding-left:calc(50vw - 49px);padding-right:calc(50vw - 49px)}
-  #float-design .orb,#float-art .orb{flex-basis:98px;width:98px;height:74px;border-radius:16px}
+  #float-design,#float-art{padding-left:12px;padding-right:12px}
+  #float-design .orb,#float-art .orb{flex-basis:clamp(68px,21vw,82px);width:clamp(68px,21vw,82px);height:clamp(52px,16vw,62px);border-radius:14px}
   #float-research .orb-pub{flex-basis:205px;width:205px;min-height:78px;max-height:96px;font-size:10.5px;padding:9px 10px}
   #float-research .float-grid>.orb-pub:first-child{flex-basis:96px;min-height:78px;font-size:11px}
   .more-works-wrap,body.design-active .more-works-wrap,body.research-active .more-works-wrap,body.art-active .more-works-wrap{top:calc(62dvh + 110px)}
@@ -661,6 +663,7 @@ function buildOrbs(){
 
   buildCustom('float-design',designFront,designLayout,'design');
   buildCustom('float-art',artFront,artLayout,'art');
+  enableMobileFloatScroll();
 
   const rc=document.getElementById('float-research');
   rc.innerHTML='';
@@ -674,6 +677,7 @@ function buildOrbs(){
   const hdrR=document.createElement('div');hdrR.className='orb-pub editable-target';hdrR.style.cssText='font-weight:700;border:none;box-shadow:none;background:transparent';hdrR.textContent='Conference Papers';colR.appendChild(hdrR);
   rightPubs.forEach(p=>{const wrap=document.createElement('div');wrap.innerHTML=mkFrontPubCard(p);const d=wrap.firstElementChild;if(p.doi)d.onclick=()=>window.open(p.doi,'_blank');colR.appendChild(d)});
   rc.appendChild(colR);
+  enableMobileFloatScroll();
 }
 
 function updateOrbAnchors(){
@@ -691,6 +695,17 @@ function updateOrbAnchors(){
 
 buildOrbs();
 updateOrbAnchors();
+
+function enableMobileFloatScroll(){
+  document.querySelectorAll('#float-design,#float-art,#float-research').forEach(el=>{
+    if(el.dataset.scrollReady) return;
+    el.dataset.scrollReady='1';
+    ['touchstart','touchmove','wheel'].forEach(type=>{
+      el.addEventListener(type,e=>e.stopPropagation(),{passive:true});
+    });
+  });
+}
+enableMobileFloatScroll();
 
 function floatOrbs(){
   document.querySelectorAll('.orb').forEach(orb=>{
