@@ -244,11 +244,71 @@ body.theme-dark .orb-pub a{color:#aac}
   .face-label{white-space:nowrap}
   .aspect-desc{width:min(80vw,330px);font-size:13px;line-height:1.5}
   .orb{width:clamp(88px,34vw,122px);height:clamp(68px,27vw,96px);border-radius:18px}
+  #float-design,#float-art,#float-research{
+    inset:auto 0 auto 0;
+    top:64dvh;
+    height:116px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    overscroll-behavior-x:contain;
+    padding:0 18px 8px;
+    pointer-events:auto;
+    scrollbar-width:none;
+    z-index:9;
+  }
+  #float-design,#float-art{padding-left:max(18px,calc(50vw - 239px));padding-right:max(18px,calc(50vw - 239px))}
+  #float-design::-webkit-scrollbar,#float-art::-webkit-scrollbar,#float-research::-webkit-scrollbar{display:none}
+  #float-design .orb,#float-art .orb{
+    position:relative!important;
+    left:auto!important;
+    top:auto!important;
+    transform:none!important;
+    flex:0 0 112px;
+    width:112px;
+    height:84px;
+    border-radius:18px;
+    align-self:center;
+  }
+  #float-design .orb:hover,#float-art .orb:hover{transform:none!important}
+  #float-research .float-grid{
+    position:static!important;
+    inset:auto!important;
+    width:auto!important;
+    transform:none!important;
+    display:contents!important;
+    overflow:visible;
+    padding:0;
+  }
+  #float-research .orb-pub{
+    flex:0 0 220px;
+    width:220px;
+    min-height:84px;
+    max-height:108px;
+    overflow:hidden;
+    padding:10px 12px;
+    font-size:11px;
+    line-height:1.32;
+  }
+  #float-research .float-grid>.orb-pub:first-child{
+    flex-basis:108px;
+    min-height:84px;
+    display:flex;
+    align-items:center;
+    background:transparent!important;
+    color:var(--fg)!important;
+    font-size:12px;
+    line-height:1.2;
+  }
   .more-works-btn{font-size:11px;padding:10px 20px}
   .more-works-via{font-size:9px;letter-spacing:.07em}
-  body.design-active .more-works-wrap,body.art-active .more-works-wrap{top:auto;bottom:calc(92px + env(safe-area-inset-bottom,0px))}
-  .scroll-hint{top:auto;bottom:16px;font-size:11px;letter-spacing:.12em;white-space:nowrap}
-  .social{left:12px;bottom:12px;gap:14px}
+  .more-works-wrap,body.design-active .more-works-wrap,body.research-active .more-works-wrap,body.art-active .more-works-wrap{top:calc(64dvh + 124px);bottom:auto}
+  .scroll-hint{top:auto;bottom:18px;font-size:11px;letter-spacing:.12em;white-space:nowrap}
+  .social{left:12px;bottom:18px;gap:12px}
+  .social a{width:28px;height:28px;align-items:center;justify-content:center}
+  .social svg{width:19px;height:19px;opacity:.75}
   .content-page,.detail-page{padding-top:46px}
   .content-inner,.detail-inner{padding:18px 16px 64px}
   .content-back{margin-bottom:20px}
@@ -266,6 +326,12 @@ body.theme-dark .orb-pub a{color:#aac}
   .land-links{max-width:320px}
   .land-links a{flex:1 1 92px;justify-content:center}
   .orb{width:clamp(76px,31vw,106px);height:clamp(60px,24vw,82px);border-radius:16px}
+  #float-design,#float-art,#float-research{top:62dvh;height:104px;padding:0 14px 8px}
+  #float-design,#float-art{padding-left:max(14px,calc(50vw - 211px));padding-right:max(14px,calc(50vw - 211px))}
+  #float-design .orb,#float-art .orb{flex-basis:98px;width:98px;height:74px;border-radius:16px}
+  #float-research .orb-pub{flex-basis:205px;width:205px;min-height:78px;max-height:96px;font-size:10.5px;padding:9px 10px}
+  #float-research .float-grid>.orb-pub:first-child{flex-basis:96px;min-height:78px;font-size:11px}
+  .more-works-wrap,body.design-active .more-works-wrap,body.research-active .more-works-wrap,body.art-active .more-works-wrap{top:calc(62dvh + 110px)}
   .aspect-desc{width:min(82vw,310px)}
   .content-inner,.detail-inner{padding-left:14px;padding-right:14px}
 }
@@ -833,13 +899,14 @@ function showFloats(idx){
 }
 
 const cont=document.getElementById('scene-container');
-cont.addEventListener('mousedown',e=>{if(isEditing)return;isDragging=true;dragStartX=e.clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0';turbulence=1});
+function skipSceneDrag(e){return e.target.closest('.float-container,.social,.more-works-wrap,.nav,.menu-overlay')}
+cont.addEventListener('mousedown',e=>{if(isEditing||skipSceneDrag(e))return;isDragging=true;dragStartX=e.clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0';turbulence=1});
 window.addEventListener('mousemove',e=>{if(isDragging){targetAngle=dragStartAngle+(e.clientX-dragStartX)*.005;turbulence=Math.min(3,turbulence+.02)}});
 window.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;idle();turbulence*=.5}});
-cont.addEventListener('touchstart',e=>{if(isEditing)return;isDragging=true;dragStartX=e.touches[0].clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0';turbulence=1},{passive:false});
+cont.addEventListener('touchstart',e=>{if(isEditing||skipSceneDrag(e))return;isDragging=true;dragStartX=e.touches[0].clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0';turbulence=1},{passive:false});
 window.addEventListener('touchmove',e=>{if(isDragging){e.preventDefault();targetAngle=dragStartAngle+(e.touches[0].clientX-dragStartX)*.005;turbulence=Math.min(3,turbulence+.02)}},{passive:false});
 window.addEventListener('touchend',()=>{if(isDragging){isDragging=false;idle();turbulence*=.5}});
-cont.addEventListener('wheel',e=>{if(isEditing)return;e.preventDefault();autoRotate=false;clearTimeout(idleTimer);targetAngle-=(e.deltaX+e.deltaY)*.003;turbulence=1.5;document.getElementById('scrollHint').style.opacity='0';clearTimeout(window._st);window._st=setTimeout(()=>idle(),300)},{passive:false});
+cont.addEventListener('wheel',e=>{if(isEditing||skipSceneDrag(e))return;e.preventDefault();autoRotate=false;clearTimeout(idleTimer);targetAngle-=(e.deltaX+e.deltaY)*.003;turbulence=1.5;document.getElementById('scrollHint').style.opacity='0';clearTimeout(window._st);window._st=setTimeout(()=>idle(),300)},{passive:false});
 function idle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{autoRotate=true},5000)}
 function lockFace(idx){if(isEditing)return;if(idx===getActiveFace()){openPage(faces[idx]);return}activeFaceIndex=idx;const n=fN[idx].clone();targetAngle=-Math.atan2(n.x,n.z);autoRotate=false;idle();showFloats(idx);applyTheme(idx);updateLabels()}
 
