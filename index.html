@@ -709,6 +709,11 @@ enableMobileFloatScroll();
 
 function floatOrbs(){
   document.querySelectorAll('.orb').forEach(orb=>{
+    if(isMobileView()){
+      orb.style.left='';
+      orb.style.top='';
+      return;
+    }
     if(orb._vx==null){
       orb._vx=(Math.random()>.5?1:-1)*(0.04375+Math.random()*0.05625);
       orb._vy=(Math.random()>.5?1:-1)*(0.0375+Math.random()*0.05);
