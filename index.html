@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8">
@@ -259,7 +258,11 @@ body.theme-dark .orb-pub a{color:#aac}
     scrollbar-width:none;
     z-index:9;
   }
-  #float-design,#float-art{padding-left:max(18px,calc(50vw - 239px));padding-right:max(18px,calc(50vw - 239px))}
+  #float-design,#float-art{
+    scroll-snap-type:x proximity;
+    padding-left:calc(50vw - 56px);
+    padding-right:calc(50vw - 56px);
+  }
   #float-design::-webkit-scrollbar,#float-art::-webkit-scrollbar,#float-research::-webkit-scrollbar{display:none}
   #float-design .orb,#float-art .orb{
     position:relative!important;
@@ -271,6 +274,7 @@ body.theme-dark .orb-pub a{color:#aac}
     height:84px;
     border-radius:18px;
     align-self:center;
+    scroll-snap-align:center;
   }
   #float-design .orb:hover,#float-art .orb:hover{transform:none!important}
   #float-research .float-grid{
@@ -305,7 +309,7 @@ body.theme-dark .orb-pub a{color:#aac}
   .more-works-btn{font-size:11px;padding:10px 20px}
   .more-works-via{font-size:9px;letter-spacing:.07em}
   .more-works-wrap,body.design-active .more-works-wrap,body.research-active .more-works-wrap,body.art-active .more-works-wrap{top:calc(64dvh + 124px);bottom:auto}
-  .scroll-hint{top:auto;bottom:18px;font-size:11px;letter-spacing:.12em;white-space:nowrap}
+  .scroll-hint{top:calc(64dvh + 188px);bottom:auto;font-size:11px;letter-spacing:.12em;white-space:nowrap}
   .social{left:12px;bottom:18px;gap:12px}
   .social a{width:28px;height:28px;align-items:center;justify-content:center}
   .social svg{width:19px;height:19px;opacity:.75}
@@ -327,11 +331,12 @@ body.theme-dark .orb-pub a{color:#aac}
   .land-links a{flex:1 1 92px;justify-content:center}
   .orb{width:clamp(76px,31vw,106px);height:clamp(60px,24vw,82px);border-radius:16px}
   #float-design,#float-art,#float-research{top:62dvh;height:104px;padding:0 14px 8px}
-  #float-design,#float-art{padding-left:max(14px,calc(50vw - 211px));padding-right:max(14px,calc(50vw - 211px))}
+  #float-design,#float-art{padding-left:calc(50vw - 49px);padding-right:calc(50vw - 49px)}
   #float-design .orb,#float-art .orb{flex-basis:98px;width:98px;height:74px;border-radius:16px}
   #float-research .orb-pub{flex-basis:205px;width:205px;min-height:78px;max-height:96px;font-size:10.5px;padding:9px 10px}
   #float-research .float-grid>.orb-pub:first-child{flex-basis:96px;min-height:78px;font-size:11px}
   .more-works-wrap,body.design-active .more-works-wrap,body.research-active .more-works-wrap,body.art-active .more-works-wrap{top:calc(62dvh + 110px)}
+  .scroll-hint{top:calc(62dvh + 172px)}
   .aspect-desc{width:min(82vw,310px)}
   .content-inner,.detail-inner{padding-left:14px;padding-right:14px}
 }
@@ -808,7 +813,7 @@ const canvas=document.getElementById('three-canvas');
 const scene=new THREE.Scene();scene.background=null;
 const mob=window.innerWidth<768;
 const camera=new THREE.PerspectiveCamera(mob?50:40,window.innerWidth/window.innerHeight,.1,100);
-camera.position.set(0, mob?1.2:1.5, mob?4.5:5.2); camera.lookAt(0, mob?0.3:0.4, 0);
+camera.position.set(0, mob?1.0:1.5, mob?4.5:5.2); camera.lookAt(0, mob?0.05:0.4, 0);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setClearColor(0,0);renderer.setSize(window.innerWidth,window.innerHeight,false);renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 const S=mob?0.5:0.7,pyH=S*1.35,baseR=S;
@@ -868,7 +873,7 @@ function updateLabels(){
   const ids=['label-design','label-research','label-art'];
   const descs=['desc-design','desc-research','desc-art'];
   const mob=isMobileView();
-  const cx=window.innerWidth/2,cy=window.innerHeight*(mob?.42:.44);
+  const cx=window.innerWidth/2,cy=window.innerHeight*(mob?.36:.44);
   const off=mob?70:170;
   const big=Math.min(mob?36:68,window.innerWidth*(mob?.09:.05));
   const small=Math.min(mob?13:19,window.innerWidth*(mob?.032:.014));
@@ -921,7 +926,7 @@ function animate(){
 animate();
 applyTheme(1);showFloats(1);
 
-window.addEventListener('resize',()=>{const mobile=isMobileView();camera.aspect=window.innerWidth/window.innerHeight;camera.fov=mobile?50:40;camera.position.set(0,mobile?1.2:1.5,mobile?4.5:5.2);camera.lookAt(0,mobile?0.3:0.4,0);camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight,false);resizeP();buildOrbs();updateOrbAnchors()});
+window.addEventListener('resize',()=>{const mobile=isMobileView();camera.aspect=window.innerWidth/window.innerHeight;camera.fov=mobile?50:40;camera.position.set(0,mobile?1.0:1.5,mobile?4.5:5.2);camera.lookAt(0,mobile?0.05:0.4,0);camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight,false);resizeP();buildOrbs();updateOrbAnchors()});
 
 function toggleMoreWorks(force){const panel=document.getElementById('moreWorksLinks');if(!panel)return;const shouldOpen=typeof force==='boolean'?force:!panel.classList.contains('open');panel.classList.toggle('open',shouldOpen)}
 function openMoreWorksPage(n){toggleMoreWorks(false);const target=n||faces[getActiveFace()];if(target==='art'){window.open('https://www.studio-inneract.cc/','_blank');return}openPage(target)}
@@ -1036,7 +1041,7 @@ function syncControlsFromSelection(){
   const rect=selectedEditable.getBoundingClientRect();
   const t=parseTranslate(selectedEditable);
   editorMeta.innerHTML=describeElement(selectedEditable);
-  editorText.value=selectedEditable.innerText.replace(/ /g,' ');
+  editorText.value=selectedEditable.innerText.replace(/ /g,' ');
   editorFontSize.value=Math.round(parseFloat(cs.fontSize)||0);
   const lh=parseFloat(cs.lineHeight);
   const fs=parseFloat(cs.fontSize)||16;
