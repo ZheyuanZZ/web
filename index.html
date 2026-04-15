@@ -43,8 +43,8 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .nav-menu span{display:block;height:1.5px;background:var(--fg);transition:background .8s}
 .menu-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .4s}
 .menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay a{font-family:var(--font-display);font-size:clamp(30px,5.5vw,54px);color:var(--fg);transition:color .3s}
-.menu-close{position:absolute;top:16px;right:clamp(16px,4vw,40px);font-size:28px;color:var(--fg-muted);cursor:pointer}
+.menu-overlay a{font-family:var(--font-display);font-size:clamp(30px,5.5vw,54px);color:#111!important;transition:color .3s}
+.menu-close{position:absolute;top:16px;right:clamp(16px,4vw,40px);font-size:28px;color:#111!important;cursor:pointer}
 
 /* SCENE */
 #scene-container{width:100%;height:100vh;height:100dvh;position:relative;cursor:grab;overflow:hidden;touch-action:none}
@@ -64,10 +64,11 @@ a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;b
 .float-container.hidden .orb,.float-container.hidden .orb-pub{pointer-events:none!important}
 .orb{position:absolute;pointer-events:auto;cursor:pointer;border-radius:28px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);transition:transform .4s var(--ease),opacity .5s;opacity:0;width:clamp(110px,12vw,170px);height:clamp(88px,10vw,138px)}
 .orb.show{opacity:1;pointer-events:auto;z-index:3}
-.orb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.orb img{width:100%;height:100%;object-fit:cover;transition:transform .4s;pointer-events:none}
 .orb:hover img{transform:scale(1.1)}
 .orb:hover{transform:translate(-50%,-50%) scale(1.15);box-shadow:0 8px 32px rgba(0,0,0,.18)}
 .orb:hover{box-shadow:0 8px 28px rgba(0,0,0,.15)}
+.mobile-work-row{display:none}
 /* Research orbs are text */
 .float-grid{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;width:clamp(200px,21vw,340px);pointer-events:none}
 .left-col{right:calc(50% + clamp(280px,19vw,380px))}
@@ -243,6 +244,7 @@ body.theme-dark .orb-pub a{color:#aac}
   .face-label{white-space:nowrap}
   .aspect-desc{width:min(80vw,330px);font-size:13px;line-height:1.5}
   .orb{width:clamp(88px,34vw,122px);height:clamp(68px,27vw,96px);border-radius:18px}
+  body.design-active #float-design,body.art-active #float-art{display:none!important}
   #float-design,#float-art,#float-research{
     inset:auto 0 auto 0;
     top:64dvh;
@@ -259,6 +261,33 @@ body.theme-dark .orb-pub a{color:#aac}
     scrollbar-width:none;
     z-index:9;
   }
+  .mobile-work-row{
+    position:absolute;
+    left:18px;
+    right:18px;
+    top:64dvh;
+    height:116px;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    z-index:28;
+    pointer-events:auto;
+  }
+  body.design-active .mobile-work-row,body.art-active .mobile-work-row{display:flex}
+  .mobile-work-card{
+    flex:0 1 clamp(76px,21vw,104px);
+    width:clamp(76px,21vw,104px);
+    height:clamp(58px,16vw,78px);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+    background:#eee;
+    cursor:pointer;
+    pointer-events:auto;
+    transition:transform .18s ease,box-shadow .18s ease;
+  }
+  .mobile-work-card:active{transform:translateY(-2px);box-shadow:0 7px 24px rgba(0,0,0,.14)}
+  .mobile-work-card img{width:100%;height:100%;object-fit:cover;pointer-events:none}
   #float-design,#float-art{
     justify-content:space-evenly;
     overflow:hidden;
@@ -277,7 +306,10 @@ body.theme-dark .orb-pub a{color:#aac}
     border-radius:16px;
     align-self:center;
     pointer-events:auto!important;
+    touch-action:auto;
+    z-index:13;
   }
+  #float-design .orb:active,#float-art .orb:active{transform:translateY(-2px)!important}
   #float-design .orb:hover,#float-art .orb:hover{transform:none!important}
   #float-research .float-grid{
     position:static!important;
@@ -333,6 +365,8 @@ body.theme-dark .orb-pub a{color:#aac}
   .land-links a{flex:1 1 92px;justify-content:center}
   .orb{width:clamp(76px,31vw,106px);height:clamp(60px,24vw,82px);border-radius:16px}
   #float-design,#float-art,#float-research{top:62dvh;height:104px;padding:0 14px 8px}
+  .mobile-work-row{left:12px;right:12px;top:62dvh;height:104px;gap:8px}
+  .mobile-work-card{flex-basis:clamp(68px,21vw,82px);width:clamp(68px,21vw,82px);height:clamp(52px,16vw,62px);border-radius:14px}
   #float-design,#float-art{padding-left:12px;padding-right:12px}
   #float-design .orb,#float-art .orb{flex-basis:clamp(68px,21vw,82px);width:clamp(68px,21vw,82px);height:clamp(52px,16vw,62px);border-radius:14px}
   #float-research .orb-pub{flex-basis:205px;width:205px;min-height:78px;max-height:96px;font-size:10.5px;padding:9px 10px}
@@ -400,6 +434,7 @@ window._ci=setInterval(function(){
 <div class="float-container hidden" id="float-art" data-orbs=""><div class="orb" data-orb-ring="art" data-angle="-1.5707963267948966" data-bx="720" data-by="117.096" data-ox="-15.718705025363413" data-oy="-3.9738689233967" data-lx="18.47690338946194" data-ly="13.184440124104928" data-link="flow" style="left: 704.281px; top: 113.122px; transform: translate(-50%, -50%);"><img src="https://static.wixstatic.com/media/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg/v1/fill/w_600,h_400,q_85,enc_avif,quality_auto/c7de83_b2445297c0754d9ab4bac8266e12e42cf000.jpg"></div><div class="orb" data-orb-ring="art" data-angle="-0.3141592653589793" data-bx="1005.2028281065907" data-by="282.86558698147263" data-ox="6.00253646762383" data-oy="0.7323427690865829" data-lx="14.032100799863215" data-ly="8.527303974906927" data-link="rippling" style="left: 1011.21px; top: 283.598px; transform: translate(-50%, -50%);"><img src="https://static.wixstatic.com/media/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg/v1/fill/w_600,h_400,q_80,enc_avif,quality_auto/c7de83_07190ea8d0ba4304bd079e1b8b9cc241~mv2.jpg"></div><div class="orb" data-orb-ring="art" data-angle="0.9424777960769379" data-bx="896.2650414574669" data-by="551.0864130185274" data-ox="2.699760557637572" data-oy="5.804569997763869" data-lx="14.1124013017923" data-ly="11.04991695241456" data-link="genesis" style="left: 898.965px; top: 556.891px; transform: translate(-50%, -50%);"><img src="https://static.wixstatic.com/media/c7de83_4af0fa0a3a0d4cf5898ca763f7ca127a~mv2.jpg/v1/fill/w_600,h_400,q_80,enc_avif,quality_auto/DSC_1671%20copy.jpg"></div><div class="orb" data-orb-ring="art" data-angle="2.199114857512855" data-bx="543.7349585425331" data-by="551.0864130185274" data-ox="-17.197031788278203" data-oy="2.4783209127340147" data-lx="18.566760914615582" data-ly="10.757367118020165" data-link="flowddw" style="left: 526.538px; top: 553.565px; transform: translate(-50%, -50%);"><img src="https://static.wixstatic.com/media/c7de83_656c17d947544319b4edd87a7156c22f~mv2.jpg/v1/fill/w_600,h_400,q_80,enc_avif,quality_auto/IMG_8671_JPG.jpg"></div><div class="orb" data-orb-ring="art" data-angle="3.4557519189487724" data-bx="434.7971718934093" data-by="282.86558698147263" data-ox="-15.621342245651924" data-oy="1.901151873702715" data-lx="17.00932444883425" data-ly="9.055966038573077" data-link="emotion" style="left: 419.176px; top: 284.767px; transform: translate(-50%, -50%);"><img src="https://static.wixstatic.com/media/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg/v1/fill/w_600,h_400,q_85,enc_avif,quality_auto/c7de83_209780b6dabb42baa35c29165ad6b466~mv2_d_8688_5792_s_4_2.jpg"></div></div>
 <!-- RESEARCH -->
 <div class="float-container hidden" id="float-research" data-pubs=""></div>
+<div class="mobile-work-row" id="mobile-work-row" aria-label="Featured works"></div>
 
 <div class="bio editable-target" style="">I am Zheyuan Zhang, a final-year PhD student at Dyson School of Design Engineering, Imperial College London.</div>
 <div class="social">
@@ -563,6 +598,42 @@ projects.comtour={
   };
 });
 
+Object.assign(projects.flow,{
+  title:'Flow (2025)',
+  meta:'Interactive digital installation, permanent feature in West Middlesex University Hospital, London',
+  body:`<p>Flow is an interactive digital installation that recreates the natural movement and flow of water. Inspired by the natural movement of water, Flow mimics the ebb and flow of tides, dynamically adjusting its visuals based on the surrounding environment and the inputs from audiences. Flow adapts and shifts according to real-time environmental data such as time, temperature, ambient light, and noise levels. For example, as time shifts throughout the day, the installation changes its colour and intensity, offering a different visual experience from morning to night.</p>
+  <p>Meanwhile, ss an interactive and ever-shifting visual art, Flow responds to audience inputs, which include bodily movements and facial expressions. It invites the audience to contemplate and become aware of their bodies and emotions. The generation and strength of the waves, along with the color and visual complexity, shift dynamically according to the user’s current movements and emotions, cultivating mindfulness of both body and mind.</p>
+  <p>Flow transforms the hospital entrance into a responsive, immersive space that helps visitors, patients, and staff connect with their surroundings and adjust their moods. By interacting with the environment and its people, the installation fosters mindfulness and provides a calming visual experience amidst the fast-paced hospital atmosphere.</p>`,
+  sourceUrl:'https://www.studio-inneract.cc/flow-in-wm',
+  sourceLabel:'More | via Studio Inneract'
+});
+
+Object.assign(projects.rippling,{
+  title:'Rippling Senses (2022)',
+  meta:'Interactive installation with sensors',
+  body:`<p>This installation uses AI that senses and collects anonymous data including bodily movement and facial expressions of everyone who’s walking past it, and respond to them with live-generated artwork. It displays an artistic contemplation on the cumulative data of the current environment, and also an attempt to distract and communicate. As part of the Future Hospital scheme and the Immersive Healing Art Project, this digital art installation is t latest probe into smart and responsive environment of future healthcare that utilise the power of art and technology.</p>
+  <p>This installation was installed and exhibited at Chelsea and Westminster Hospital from September 2022 to March 2024.</p>`,
+  sourceUrl:'https://www.studio-inneract.cc/ihas-chelwest',
+  sourceLabel:'More | via Studio Inneract'
+});
+
+Object.assign(projects.flowddw,{
+  title:'Flow (Beta, 2024)',
+  meta:'Dutch Design Week, Eindhoven, 2024',
+  body:`<p>The demo prototype of Flow was on exhibition at the Dutch Design Week in Eindhoven, the Netherlands. The Exhibition was in October 2024.</p>`,
+  sourceUrl:'https://www.studio-inneract.cc/ihas-ddw2022',
+  sourceLabel:'More | via Studio Inneract'
+});
+
+Object.assign(projects.genesis,{
+  title:'Genesis Screens (2021)',
+  meta:'Interactive installation, Exhibition in Saatchi Gallery, Dec 2020 - Feb 2021',
+  body:`<p>Mental health issues like stress, anxiety and burnout have been aggravating since rapid modernisation. In 2019, the WHO recognises ‘burnout’ as an occupational phenomenon. And in the post-pandemic era, more economical and societal problems are posing more threats to the mental wellbeing of the general public.</p>
+  <p>The Genesis Screens project provides therapeutic experiences in which audiences are invited to co-create an artwork related to their current thoughts and emotions. During the process, viewers are asked to make an expression based on their current mood or things that occupies their mind. The system would capture their expressions and generate a unique visual artwork for them, along with a clip of music and meaningful words related to the emotion. The artworks are generated using tailored-built AI algorithms capable of creating infinite amount of visual artwork under specific emotional styles, like calming, sad, happy and uplifting. Hence, in the IHAS system, every emotion detected could lead to different, often surprising and touching artwork that allow the spectators to see and experience.</p>`,
+  sourceUrl:'https://www.studio-inneract.cc/saatchi',
+  sourceLabel:'More | via Studio Inneract'
+});
+
 // Populate content page grids
 function mkCard(w){return `<div class="work-card" onclick="openDetail('${w.k}')"><img src="${w.img}"><div class="wc-info"><h3>${w.t}</h3><p>${w.y}</p></div></div>`}
 document.getElementById('designGrid').innerHTML=designWorks.map(mkCard).join('');
@@ -588,6 +659,25 @@ function mkFrontPubCard(p){
   if(p.doi)h+=` <a href="${p.doi}" target="_blank">DOI↗</a>`;
   if(p.award)h+=` <span class="at">${p.award}</span>`;
   return h+'</div>';
+}
+function getFrontWorks(kind){
+  const source=kind==='art'?artWorks:designWorks;
+  const keys=kind==='art'?['flow','rippling','flowddw','genesis']:['ohub','dovetail','whisper','crescent'];
+  return keys.map(k=>source.find(w=>w.k===k)).filter(Boolean);
+}
+function renderMobileWorkRow(idx){
+  const row=document.getElementById('mobile-work-row');
+  if(!row) return;
+  if(idx===1){row.innerHTML='';return}
+  const kind=idx===2?'art':'design';
+  row.innerHTML=getFrontWorks(kind).map(w=>`<button type="button" class="mobile-work-card" data-link="${w.k}" aria-label="${w.t||w.k}"><img src="${w.img}" alt=""></button>`).join('');
+  row.querySelectorAll('.mobile-work-card').forEach(card=>{
+    card.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      openDetail(card.dataset.link);
+    });
+  });
 }
 
 /* ====== BUILD FLOATING ORBS anchored around pyramid center ====== */
@@ -642,8 +732,10 @@ function buildOrbs(){
       if(!pos) return;
       const x=cx+(pos.px*r*mobileScale);
       const y=cy+(pos.py*r*ry*mobileScale);
-      const orb=document.createElement('div');
+      const orb=document.createElement('a');
       orb.className='orb';
+      orb.href=`#work-${w.k}`;
+      orb.setAttribute('aria-label',w.t||w.k);
       orb.style.cssText=`left:${x}px;top:${y}px;transform:translate(-50%,-50%)`;
       orb.setAttribute('data-orb-ring',ringName);
       orb.setAttribute('data-px',pos.px);
@@ -655,7 +747,6 @@ function buildOrbs(){
       orb.setAttribute('data-lx',8+Math.random()*7);
       orb.setAttribute('data-ly',7+Math.random()*6);
       orb.setAttribute('data-link',w.k);
-      orb.onclick=()=>openDetail(w.k);
       orb.innerHTML=`<img src="${w.img}">`;
       c.appendChild(orb);
     });
@@ -664,6 +755,7 @@ function buildOrbs(){
   buildCustom('float-design',designFront,designLayout,'design');
   buildCustom('float-art',artFront,artLayout,'art');
   enableMobileFloatScroll();
+  enableWorkRowClicks();
 
   const rc=document.getElementById('float-research');
   rc.innerHTML='';
@@ -698,14 +790,27 @@ updateOrbAnchors();
 
 function enableMobileFloatScroll(){
   document.querySelectorAll('#float-design,#float-art,#float-research').forEach(el=>{
-    if(el.dataset.scrollReady) return;
-    el.dataset.scrollReady='1';
-    ['touchstart','touchmove','wheel'].forEach(type=>{
-      el.addEventListener(type,e=>e.stopPropagation(),{passive:true});
-    });
+    el.dataset.scrollReady='0';
   });
 }
 enableMobileFloatScroll();
+
+function enableWorkRowClicks(){
+  if(document.body.dataset.workClickReady) return;
+  document.body.dataset.workClickReady='1';
+  const activate=e=>{
+    const orb=e.target.closest('#float-design .orb,#float-art .orb');
+    if(!orb||isEditing) return;
+    const key=orb.getAttribute('data-link');
+    if(!key) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openDetail(key);
+  };
+  document.addEventListener('click',activate,true);
+  document.addEventListener('touchend',activate,{capture:true,passive:false});
+}
+enableWorkRowClicks();
 
 function floatOrbs(){
   document.querySelectorAll('.orb').forEach(orb=>{
@@ -904,6 +1009,7 @@ function updateLabels(){
 }
 
 function showFloats(idx){
+  renderMobileWorkRow(idx);
   ['float-design','float-research','float-art'].forEach((id,i)=>{
     const c=document.getElementById(id);
     const items=c.querySelectorAll('.orb,.orb-pub');
@@ -924,7 +1030,7 @@ function showFloats(idx){
 }
 
 const cont=document.getElementById('scene-container');
-function skipSceneDrag(e){return e.target.closest('.float-container,.social,.more-works-wrap,.nav,.menu-overlay')}
+function skipSceneDrag(e){return e.target.closest('.float-container,.mobile-work-row,.social,.more-works-wrap,.nav,.menu-overlay')}
 cont.addEventListener('mousedown',e=>{if(isEditing||skipSceneDrag(e))return;isDragging=true;dragStartX=e.clientX;dragStartAngle=currentAngle;autoRotate=false;clearTimeout(idleTimer);document.getElementById('scrollHint').style.opacity='0';turbulence=1});
 window.addEventListener('mousemove',e=>{if(isDragging){targetAngle=dragStartAngle+(e.clientX-dragStartX)*.005;turbulence=Math.min(3,turbulence+.02)}});
 window.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;idle();turbulence*=.5}});
@@ -953,8 +1059,9 @@ function openMoreWorksPage(n){toggleMoreWorks(false);const target=n||faces[getAc
 function openPage(n){toggleMoreWorks(false);document.getElementById('page-'+n).classList.add('open');document.body.style.overflow='auto';autoRotate=false}
 function closePage(n){document.getElementById('page-'+n).classList.remove('open');document.body.style.overflow='hidden';idle()}
 function closeAllPages(){toggleMoreWorks(false);document.querySelectorAll('.content-page,.detail-page').forEach(p=>p.classList.remove('open'));document.body.style.overflow='hidden';idle()}
-function openDetail(k){toggleMoreWorks(false);if(isEditing)return;const p=projects[k];if(!p)return;document.getElementById('detail-img').src=p.hero;const detailTitleEl=document.getElementById('detail-title');const detailMetaEl=document.getElementById('detail-meta');detailTitleEl.textContent=p.title;detailMetaEl.textContent=p.meta;detailTitleEl.setAttribute('style',p.titleStyle||'');detailMetaEl.setAttribute('style',p.metaStyle||'');document.getElementById('detail-body').innerHTML=(p.body||'')+(p.sourceUrl?`<p><a class="btn" href="${p.sourceUrl}" target="_blank" rel="noopener">View original project ↗</a></p>`:'');const g=document.getElementById('detail-gallery');g.innerHTML='';(p.gallery||[]).forEach(s=>{const i=document.createElement('img');i.src=s;g.appendChild(i)});document.getElementById('detail-page').classList.add('open');document.body.style.overflow='auto'}
+function openDetail(k){toggleMoreWorks(false);if(isEditing)return;const p=projects[k];if(!p)return;document.getElementById('detail-img').src=p.hero;const detailTitleEl=document.getElementById('detail-title');const detailMetaEl=document.getElementById('detail-meta');detailTitleEl.textContent=p.title;detailMetaEl.textContent=p.meta;detailTitleEl.setAttribute('style',p.titleStyle||'');detailMetaEl.setAttribute('style',p.metaStyle||'');const sourceLabel=p.sourceLabel||'View original project ↗';document.getElementById('detail-body').innerHTML=(p.body||'')+(p.sourceUrl?`<p><a class="btn" href="${p.sourceUrl}" target="_blank" rel="noopener">${sourceLabel}</a></p>`:'');const g=document.getElementById('detail-gallery');g.innerHTML='';(p.gallery||[]).forEach(s=>{const i=document.createElement('img');i.src=s;g.appendChild(i)});document.getElementById('detail-page').classList.add('open');document.body.style.overflow='auto'}
 function closeDetail(){document.getElementById('detail-page').classList.remove('open')}
+window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#work-(.+)$/);if(m&&projects[m[1]]){openDetail(m[1]);history.replaceState(null,'',location.pathname+location.search)}});
 
 
 const EDITABLE_SELECTOR = [
